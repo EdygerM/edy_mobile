@@ -1,0 +1,5 @@
+<launch>
+  <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization" clear_params="true">
+    <rosparam command="load" file="$(find edy_mobile)/config/ekf.yaml"/>
+  </node>
+</launch>

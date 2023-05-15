@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<robot name="edy_mobile" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Constants -->
+  <xacro:property name="base_radius" value="0.125" />
+  <xacro:property name="base_height" value="0.11" />
+  <xacro:property name="wheel_radius" value="0.035" />
+  <xacro:property name="wheel_width" value="0.025" />
+  <xacro:property name="wheel_separation" value="0.210" />
+  <xacro:property name="mass_base" value="2.0" />
+  <xacro:property name="gravitational_offset" value="0.025" />
+
+  <!-- Base Link -->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <cylinder radius="${base_radius}" length="${base_height}" />
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder radius="${base_radius}" length="${base_height}" />
+      </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 ${base_height / 2 - gravitational_offset}" rpy="0 0 0" />
+      <mass value="${mass_base}" />
+      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1" />
+    </inertial>
+  </link>
+
+  <!-- Wheel Macro -->
+  <xacro:macro name="wheel" params="name xpos">
+    <link name="${name}">
+      <visual>
+        <origin xyz="0 0 0" rpy="1.570795 0 0" />
+        <geometry>
+          <cylinder radius="${wheel_radius}" length="${wheel_width}" />
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="1.570795 0 0" />
+        <geometry>
+          <cylinder radius="${wheel_radius}" length="${wheel_width}" />
+        </geometry>
+      </collision>
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="0.5" />
+        <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1" />
+      </inertial>
+    </link>
+    <joint name="${name}_joint" type="continuous">
+      <parent link="base_link" />
+      <child link="${name}" />
+      <origin xyz="${xpos} 0 ${wheel_radius}" rpy="0 0 0" />
+      <axis xyz="0 1 0" />
+      <dynamics friction="0.5" />
+    </joint>
+  </xacro:macro>
+
+  <!-- Left Wheel -->
+  <xacro:wheel name="left_wheel" xpos="${-wheel_separation / 2}" />
+
+  <!-- Right Wheel -->
+  <xacro:wheel name="right_wheel" xpos="${wheel_separation / 2}" />
+
+</robot>

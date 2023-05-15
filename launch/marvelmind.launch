@@ -1,0 +1,8 @@
+<launch>
+  <node name="marvelmind_publisher" pkg="marvelmind_nav" type="hedge_rcv_bin" output="screen">
+    <rosparam command="load" file="$(find edy_mobile)/config/marvelmind.yaml"/>
+  </node>
+
+  <node name="marvelmind_to_odometry" pkg="edy_mobile" type="marvelmind_to_odometry.py" output="screen">
+  </node>
+</launch>

@@ -1,0 +1,13 @@
+<launch>
+  <!-- Launch RViz -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find edy_mobile)/config/urdf.rviz" respawn="false" output="screen">
+  </node>
+
+  <param name="robot_description" command="cat $(find edy_mobile)/urdf/edy_mobile.urdf" />
+
+  <!-- Launch robot_state_publisher -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
+    
+  </node>
+  
+</launch>

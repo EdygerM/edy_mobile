@@ -1,0 +1,43 @@
+<launch>
+
+  <node pkg="tf" type="static_transform_publisher" name="map_to_odom_broadcaster" args="0 0 0 0 0 0 map odom 30" />
+  
+
+  <!-- Marvelmind Ultrasonic Sensor Publisher -->
+	<!-- Published (topics used only): /hedge_pos_ang, /hedge_imu_fusion -->
+  <node name="marvelmind_publisher" pkg="marvelmind_nav" type="hedge_rcv_bin" output="screen">
+    <rosparam command="load" file="$(find edy_mobile)/config/marvelmind.yaml"/>
+  </node>
+
+  <!-- Convert Marvelmind sensors data to Odometry and IMU message -->
+  <!-- Subscribed : /hedge_pos_ang, /hedge_imu_fusion -->
+	<!-- Published : /odom, /imu -->
+  <node name="marvelmind_to_odometry" pkg="edy_mobile" type="marvelmind_to_odometry.py" output="screen">
+  </node>
+
+  <!-- Implementation of an Extended Kalman Filter (EKF) for a localization estimate -->
+  <!-- Subscribed : /odom, /imu -->
+	<!-- Published (topics used only): /odometry/filtered -->
+  <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization" clear_params="true">
+    <rosparam command="load" file="$(find edy_mobile)/config/ekf.yaml"/>
+  </node>
+
+  <!--remap from="imu_data" to="imu" />
+  <node pkg="robot_pose_ekf" type="robot_pose_ekf" name="robot_pose_ekf">
+    <param name="output_frame" value="odom"/>
+    <param name="base_footprint_frame" value="base_link"/>
+    <param name="freq" value="30.0"/>
+    <param name="sensor_timeout" value="1.0"/>
+    <param name="odom_used" value="true"/>
+    <param name="imu_used" value="true"/>
+    <param name="vo_used" value="false"/>
+    <param name="gps_used" value="false"/>
+    <param name="debug" value="false"/>
+    <param name="self_diagnose" value="false"/>
+  </node-->
+
+  
+
+  <node name="rviz" pkg="rviz" type="rviz" respawn="false" output="screen">
+  </node>
+</launch>

@@ -1,0 +1,6 @@
+marvelmind:
+  tty: "/dev/ttyACM0"
+  baudrate: 115200
+  broadcasting_rate: 10
+  quiet: False
+  frame_id: "base_link"
